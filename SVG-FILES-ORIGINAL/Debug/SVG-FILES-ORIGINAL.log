@@ -1,0 +1,31 @@
+﻿  CommandReader.cpp
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.cpp(22,23): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.cpp(40,14): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.cpp(88,23): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(52,23): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(48): message : while compiling class template member function 'Vector<String>::Vector(const Vector<String> &)'
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.cpp(62): message : see reference to function template instantiation 'Vector<String>::Vector(const Vector<String> &)' being compiled
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.h(10): message : see reference to class template instantiation 'Vector<String>' being compiled
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(93,23): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(89): message : while compiling class template member function 'void Vector<String>::resize(void)'
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(126): message : see reference to function template instantiation 'void Vector<String>::resize(void)' being compiled
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(48): message : while compiling class template member function 'Vector<String>::Vector(const Vector<String> &)'
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\CommandReader.cpp(62): message : see reference to function template instantiation 'Vector<String>::Vector(const Vector<String> &)' being compiled
+  Taskmanager.cpp
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(17,24): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(106,24): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(199,26): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(204,27): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(221,24): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(226,25): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(231,24): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(251,24): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(93,23): warning C4018: '<': signed/unsigned mismatch
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(89): message : while compiling class template member function 'void Vector<Figure *>::resize(void)'
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(126): message : see reference to function template instantiation 'void Vector<Figure *>::resize(void)' being compiled
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Vector.h(39): message : while compiling class template member function 'Vector<Figure *>::Vector(void)'
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.cpp(9): message : see reference to function template instantiation 'Vector<Figure *>::Vector(void)' being compiled
+E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\SVG-FILES-ORIGINAL\Taskmanager.h(8): message : see reference to class template instantiation 'Vector<Figure *>' being compiled
+  main.cpp
+  Generating Code...
+  SVG-FILES-ORIGINAL.vcxproj -> E:\Visual studio\Object-Oriented-Programming\SVG-FILES-ORIGINAL\Debug\SVG-FILES-ORIGINAL.exe
