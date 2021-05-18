@@ -9,11 +9,11 @@ private:
 	int x2;
 	int y2;
 	int width;
-	char* colour;
+	String colour;
 public:
 	Line();
-	Line(const int _x1, const int _y1, const int _x2, const int _y2, const int width, const char* _colour);
-	~Line();
+	Line(const int _x1, const int _y1, const int _x2, const int _y2, const int width, String _colour);
+	
 	Line& operator=(const Line& other);
 
 	friend std::ostream& operator<<(std::ostream& os, const Line& line);
@@ -21,4 +21,10 @@ public:
 	void translate(int vertical, int horizontal) override;
 	String getFigureType() override;
 	void printSave(std::ostream& os) override;
+	Vector<int> getParams() override; 
+
+	int getX1()const;
+	int getX2()const;
+	int getY1()const;
+	int getY2()const;
 };

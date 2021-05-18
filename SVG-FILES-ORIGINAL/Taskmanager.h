@@ -2,6 +2,9 @@
 #include "Figure.h"
 #include "Vector.h"
 #include "String.h"
+#include "Rect.h"
+#include "Circle.h"
+#include "Line.h"
 
 class TaskManager {
 private:   
@@ -25,9 +28,13 @@ public:
 	void loadCircle(char buff[100]);
 	void loadLine(char buff[100]);
 
-	void loadRectFromInput(Vector<String>& splittedCommand);
-	void loadCircleFromInput(Vector<String>& splittedCommand);
-	void loadLineFromInput(Vector<String>& splittedCommand);
+	Figure* loadRectFigFromInput(Vector<String>& splittedCommand);
+	Figure* loadCircleFigFromInput(Vector<String>& splittedCommand);
+	Figure* loadLineFigFromInput(Vector<String>& splittedCommand);
+
+	Rect loadRectFromInput(Vector<String>& splittedCommand);
+	Circle loadCircleFromInput(Vector<String>& splittedCommand);
+	Line loadLineFromInput(Vector<String>& splittedCommand);
 
 	String getCurrentFile()const ;
 

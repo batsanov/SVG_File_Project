@@ -10,19 +10,24 @@ private:
 	int y;
 	int width;
 	int height;
-	char* colour;
+	String colour;
 public:
 	Rect();
-	Rect(const int x, const int y, const int width, const int height, const char* colour);
-	~Rect();
+	Rect(const int x, const int y, const int width, const int height, String colour);
+	
+
 	friend std::ostream& operator<<(std::ostream& os, const Rect& rect);
 	Rect& operator= (const Rect& other);
 	void print(std::ostream& os)override;
 	void translate(int vertical, int horizontal) override;
 	String getFigureType() override;
 	void printSave(std::ostream& os) override;
+	Vector<int> getParams() override;//
 
-    bool isWithinRectangle(Rect& other) override; //to be implemented
+	int getX() const;
+	int getY() const;
+	int getWidth() const;
+	int getHeight() const;
 
 };
 

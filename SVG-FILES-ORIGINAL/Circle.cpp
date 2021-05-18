@@ -1,37 +1,29 @@
 #include "Circle.h"
 #include <string.h>
 
+
+
 Circle::Circle() : Figure()
 {
-  colour = nullptr;
 }
 
-Circle::Circle(const int _cx, const int _cy, const int _r, const char* _colour) : Figure()
+Circle::Circle(const int _cx, const int _cy, const int _r, String _colour) : Figure()
 {
 	cx = _cx;
 	cy = _cy;
 	r = _r;
-	colour = new char[strlen(_colour) + 1];
-	strcpy_s(colour, strlen(_colour) + 1, _colour);
+	colour = _colour;
 }
 
-Circle::~Circle()
-{
-	cx = cy = r = 0;
-	delete[] colour;
-}
+
 
 Circle& Circle::operator=(const Circle& other)
 {
-	if (colour != nullptr)
-	{
-		delete[] colour;
-	}
+
 	cx = other.cx;
 	cy = other.cy;
 	r = other.r;
-	colour = new char[strlen(other.colour) + 1];
-	strcpy_s(colour, strlen(other.colour) + 1, other.colour);
+	colour = other.colour;
 	return *this;
 }
 
@@ -56,6 +48,32 @@ String Circle::getFigureType()
 void Circle::printSave(std::ostream& os)
 {
 	os << "	<circle cx=\"" << cx << "\" cy=\"" << cy << "\" r=\"" << r << "\" fill=\"" << colour << "\" />" << std::endl;
+}
+
+Vector<int> Circle::getParams()
+{
+	Vector<int> params;
+	params.pushAtBack(cx);
+	params.pushAtBack(cy);
+	params.pushAtBack(r);
+	return params;
+}
+
+
+
+int Circle::getCx() const
+{
+	return cx;
+}
+
+int Circle::getCy() const
+{
+	return cy;
+}
+
+int Circle::getR() const
+{
+	return r;
 }
 
 std::ostream& operator<<(std::ostream& os, const Circle& circle)

@@ -4,6 +4,7 @@
 #include "Rect.h"
 #include "Circle.h"
 #include "Line.h"
+#include "WithinCalculator.h"
 
 TaskManager::TaskManager()
 {
@@ -144,12 +145,38 @@ void TaskManager::saveas(Vector<String> splittedCommand)
 
 void TaskManager::within(Vector<String> splittedCommand)
 {
-	String areaShape = splittedCommand[1];
+	String wantedShape = splittedCommand[1];
 	
-	for (size_t i = 0; i < container.getsize(); i++)
+
+	if (wantedShape == "rectangle" || wantedShape == "Rectangle")
+	{
+		Rect rect = loadRectFromInput(splittedCommand);
+
+		for (size_t i = 0; i < container.getsize(); i++)
+		{
+			if (container[i]->getFigureType() == "rectangle")
+			{
+				//WithinCalculator::rectWithinRect(rect, container[i]);
+			}
+		}
+
+	}
+
+	else if (wantedShape == "circle" || wantedShape == "Circle")
 	{
 		
 	}
+	else if (wantedShape == "line" || wantedShape == "Line") {
+		
+	}
+	else
+	{
+		std::cout << "Invalid shape!" << std::endl;
+		return;
+	}
+
+	
+	
 
 }
 
@@ -161,16 +188,16 @@ void TaskManager::create(Vector<String> splittedCommand)
 
 	if (wantedShape == "rectangle" || wantedShape == "Rectangle")
 	{
-		loadRectFromInput(splittedCommand);
+		container.pushAtBack(loadRectFigFromInput(splittedCommand));
 		std::cout << "Successfully created " << wantedShape << std::endl;
 	}
 	else if (wantedShape == "circle" || wantedShape == "Circle")
 	{
-		loadCircleFromInput(splittedCommand);
+		container.pushAtBack(loadCircleFigFromInput(splittedCommand));
 		std::cout << "Successfully created " << wantedShape << std::endl;
 	}
 	else if (wantedShape == "line" || wantedShape == "Line") {
-		loadLineFromInput(splittedCommand);
+		container.pushAtBack(loadLineFigFromInput(splittedCommand));
 		std::cout << "Successfully created " << wantedShape << std::endl;
 	}
 	else
@@ -205,14 +232,15 @@ void TaskManager::translate(Vector<String> splittedCommand)
 				String firstParam("");
 				String secondParam("");
 
-				// 9,11 to const
+				const int verticalSize = 9;
+				const int horizontalSize = 11;
 
-				for (size_t i = 9; i < firstCommand.length(); i++)
+				for (size_t i = verticalSize; i < firstCommand.length(); i++)
 				{
 					firstParam += firstCommand[i];
 				}
 
-				for (size_t i = 11; i < secondCommand.length(); i++)
+				for (size_t i = horizontalSize; i < secondCommand.length(); i++)
 				{
 					secondParam += secondCommand[i];
 				}
@@ -249,25 +277,32 @@ void TaskManager::translate(Vector<String> splittedCommand)
 
 void TaskManager::erase(Vector<String> splittedCommand)
 {
-	int index = splittedCommand[1].parseToInt();
-	if (index > container.getsize())
+	if (splittedCommand.getsize() > 1)
 	{
-		std::cout << "There is no figure number " << index << " !" << std::endl;
-	}
-	else
-	{
-		std::cout << "Erased a " << container[index - 1]->getFigureType() << "(" << index << ")" << std::endl;
-		container.eraseAt(index - 1);
-		Figure::idCounter = 1;
-		for (size_t i = 0; i < container.getsize(); i++)
+		int index = splittedCommand[1].parseToInt();
+		if (index > container.getsize())
 		{
-			container[i]->setId(container[i]->idCounter++);
+			std::cout << "There is no figure number " << index << " !" << std::endl;
+		}
+		else
+		{
+			std::cout << "Erased a " << container[index - 1]->getFigureType() << "(" << index << ")" << std::endl;
+			container.eraseAt(index - 1);
+			Figure::idCounter = 1;
+			for (size_t i = 0; i < container.getsize(); i++)
+			{
+				container[i]->setId(container[i]->idCounter++);
+			}
 		}
 	}
+	else {
+		std::cout << "Invalid command! Type help for more info" << std::endl;
+	}
+
+
 }
 
 
-//Helping functions
 
 void TaskManager::loadRect(char buff[100])
 {
@@ -415,7 +450,11 @@ void TaskManager::loadLine(char buff[100])
 
 }
 
-void TaskManager::loadRectFromInput(Vector<String>& splittedCommand)
+
+
+
+
+Figure* TaskManager::loadRectFigFromInput(Vector<String>& splittedCommand)
 {
 	
 	int params[4] ;
@@ -431,14 +470,13 @@ void TaskManager::loadRectFromInput(Vector<String>& splittedCommand)
 		}
 	}
 
-	char* color = new char[splittedCommand[6].length() + 1];
-	splittedCommand[6].stringCopy(color);
+	String color = splittedCommand[6];
 	Figure* newFigure = new Rect(params[0], params[1], params[2], params[3], color);
-	container.pushAtBack(newFigure);
-	delete[] color;
+	
+	return newFigure;
 }
 
-void TaskManager::loadCircleFromInput(Vector<String>& splittedCommand)
+Figure* TaskManager::loadCircleFigFromInput(Vector<String>& splittedCommand)
 {
 	int params[3];
 	for (size_t i = 2; i < 5; i++)
@@ -452,14 +490,13 @@ void TaskManager::loadCircleFromInput(Vector<String>& splittedCommand)
 		}
 	}
 
-	char* color = new char[splittedCommand[5].length() + 1];
-	splittedCommand[5].stringCopy(color);
+	String color = splittedCommand[5];
 	Figure* newFigure = new Circle(params[0], params[1], params[2], color);
-	container.pushAtBack(newFigure);
-	delete[] color;
+
+	return newFigure;
 }
 
-void TaskManager::loadLineFromInput(Vector<String>& splittedCommand)
+Figure* TaskManager::loadLineFigFromInput(Vector<String>& splittedCommand)
 {
 	int params[5];
 	for (size_t i = 2; i < 7; i++)
@@ -473,12 +510,71 @@ void TaskManager::loadLineFromInput(Vector<String>& splittedCommand)
 		}
 	}
 
-	char* color = new char[splittedCommand[7].length() + 1];
-	splittedCommand[7].stringCopy(color);
+	String color = splittedCommand[7];
 	Figure* newFigure = new Line(params[0], params[1], params[2], params[3], params[4], color);
-	container.pushAtBack(newFigure);
-	delete[] color;
+	
+	return newFigure;
+}
 
+Rect TaskManager::loadRectFromInput(Vector<String>& splittedCommand)
+{
+	int params[4];
+	for (size_t i = 2; i < 6; i++)
+	{
+
+		if (splittedCommand[i].parseToInt() < 0)
+		{
+			params[i - 2] = splittedCommand[i].parseToInt() * (-1);
+		}
+		else {
+			params[i - 2] = splittedCommand[i].parseToInt();
+		}
+	}
+
+	String color = splittedCommand[6];
+	 Rect newRect (params[0], params[1], params[2], params[3], color);
+
+	return newRect;
+}
+
+Circle TaskManager::loadCircleFromInput(Vector<String>& splittedCommand)
+{
+	int params[3];
+	for (size_t i = 2; i < 5; i++)
+	{
+		if (splittedCommand[i].parseToInt() < 0)
+		{
+			params[i - 2] = splittedCommand[i].parseToInt() * (-1);
+		}
+		else {
+			params[i - 2] = splittedCommand[i].parseToInt();
+		}
+	}
+
+	String color = splittedCommand[5];
+	Circle newCircle (params[0], params[1], params[2], color);
+
+	return newCircle;
+}
+
+Line TaskManager::loadLineFromInput(Vector<String>& splittedCommand)
+{
+	int params[5];
+	for (size_t i = 2; i < 7; i++)
+	{
+		if (splittedCommand[i].parseToInt() < 0)
+		{
+			params[i - 2] = splittedCommand[i].parseToInt() * (-1);
+		}
+		else {
+			params[i - 2] = splittedCommand[i].parseToInt();
+		}
+	}
+
+	String color = splittedCommand[7];
+	Line newLine (params[0], params[1], params[2], params[3], params[4], color);
+
+	return newLine;
 }
 
 String TaskManager::getCurrentFile() const

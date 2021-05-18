@@ -3,26 +3,17 @@
 
 Rect::Rect() : Figure()
 {
-	x = y = width = height = 0;
-	colour = new char[2];
-	strcpy_s(colour, 2, " ");
 }
 
-Rect::Rect(const int _x, const int _y, const int _width, const int _height, const char* _colour) : Figure()
+Rect::Rect(const int _x, const int _y, const int _width, const int _height, String _colour) : Figure()
 {
 	x = _x;
 	y = _y;
 	width = _width;
 	height = _height;
-	colour = new char[strlen(_colour) + 1];
-	strcpy_s(colour, strlen(_colour) + 1, _colour);
+	colour = _colour;
 }
 
-Rect::~Rect()
-{
-	x = y = width = height = 0;
-	delete[] colour;
-}
 
 Rect& Rect::operator=(const Rect& other)
 {
@@ -30,12 +21,8 @@ Rect& Rect::operator=(const Rect& other)
 	y = other.y;
 	width = other.width;
 	height = other.height;
-	if (colour != nullptr)
-	{
-		delete[] colour;
-	}
-	colour = new char[strlen(other.colour) + 1];
-	strcpy_s(colour, strlen(other.colour) + 1, other.colour);
+	colour = other.colour;
+
 	return *this;
 }
 
@@ -61,6 +48,37 @@ void Rect::printSave(std::ostream& os)
 	os << "	<rect x=\"" << x << "\" y=\"" << y << "\" width=\"" << width 
 		<< "\" height=\"" << height << "\" fill=\"" << colour << "\" />" << std::endl;
 }
+
+Vector<int> Rect::getParams()
+{
+	Vector<int> params;
+	params.pushAtBack(x);
+	params.pushAtBack(y);
+	params.pushAtBack(width);
+	params.pushAtBack(height);
+	return params;
+}
+
+int Rect::getX()const
+{
+	return x;
+}
+
+int Rect::getY()const
+{
+	return y;
+}
+
+int Rect::getWidth()const
+{
+	return width; 
+}
+
+int Rect::getHeight()const
+{
+	return height;
+}
+
 
 
 std::ostream& operator<<(std::ostream& os, const Rect& rect)
