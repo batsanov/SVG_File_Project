@@ -58,12 +58,12 @@ void CommandReader::start()
 		else {
 			switch (i)
 			{
-			case 0: manager.print(); break;
+			case 0: manager.print(splittedCommand); break;
 			case 1: manager.open(splittedCommand); break;
-			case 2: manager.help(); break;
+			case 2: manager.help(splittedCommand); break;
 			case 3: manager.save(splittedCommand); break;
 			case 4: manager.create(splittedCommand); break;
-			case 5: manager.close(); break;
+			case 5: manager.close(splittedCommand); break;
 			case 6: manager.translate(splittedCommand); break;
 			case 7: manager.erase(splittedCommand); break;
 			case 8: manager.saveas(splittedCommand); break;

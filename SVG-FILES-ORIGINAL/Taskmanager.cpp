@@ -11,88 +11,111 @@ TaskManager::TaskManager()
 	currentFile = "";
 }
 
-void TaskManager::print()
+void TaskManager::print(Vector<String> splittedCommand)
 {
-	if (container.getsize() > 0)
+	if (splittedCommand.getsize() == 1)
 	{
-		for (size_t i = 0; i < container.getsize(); i++)
+		if (container.getsize() > 0)
 		{
-			container[i]->print(std::cout);
+			for (size_t i = 0; i < container.getsize(); i++)
+			{
+				container[i]->print(std::cout);
+			}
+		}
+		else
+		{
+			std::cout << "There is no existing figures!" << std::endl;
 		}
 	}
-	else
-	{
-		std::cout << "There is no existing figures!" << std::endl;
-	}
+	else std::cout << "Invalid command! Try \"print\"!" << std::endl;
 	
 }
 
 void TaskManager::open(Vector<String> splittedCommand)
 {
 	
-	currentFile = splittedCommand[1];
-	char* fileName = new char[currentFile.length() + 3];
-	currentFile.stringCopy(fileName);
-
-	std::ifstream in;
-	in.open(fileName);
-	
-	if (in)
+	if (splittedCommand.getsize() > 1)
 	{
-		std::cout << "Successfully opened " << fileName <<  std::endl;
-
-		bool readingFigures = false;
-		char buffer[100];
-		
-		while (in >> buffer)
+		if (!(currentFile == ""))
 		{
-			String word(buffer);
-			if (word == "<svg>") readingFigures = true;
-			if (word == "</svg>") break;
-
-			if (readingFigures) {
-
-				in.getline(buffer, 100);
-				if (word == "<rect")
-				{
-					loadRect(buffer);
-
-				}
-				else if(word == "<circle")
-				{
-					loadCircle(buffer);
-				}
-				else if (word == "<line") {
-					loadLine(buffer);
-				}
-			}
-		
+			std::cout << "Close the opened file first!" << std::endl;
 		}
-		in.close();
+		else {
+			currentFile = splittedCommand[1];
+			char* fileName = new char[currentFile.length() + 3];
+			currentFile.stringCopy(fileName);
+
+			std::ifstream in;
+			in.open(fileName);
+
+			if (in)
+			{
+				std::cout << "Successfully opened " << fileName << std::endl;
+
+				bool readingFigures = false;
+				char buffer[100];
+
+				while (in >> buffer)
+				{
+					String word(buffer);
+					if (word == "<svg>") readingFigures = true;
+					if (word == "</svg>") break;
+
+					if (readingFigures) {
+
+						in.getline(buffer, 100);
+						if (word == "<rect")
+						{
+							loadRect(buffer);
+
+						}
+						else if (word == "<circle")
+						{
+							loadCircle(buffer);
+						}
+						else if (word == "<line") {
+							loadLine(buffer);
+						}
+					}
+
+				}
+				in.close();
+			}
+			else
+			{
+				std::cout << "File does not exist. Created new file!" << std::endl;
+				std::ofstream of;
+				of.open(fileName);
+			}
+			delete[]fileName;
+		}
+		}
+		
+	else {
+		std::cout << "Enter valid file name!" << std::endl;
 	}
-	else
-	{
-		std::cout << "File does not exist. Created new file!" << std::endl;
-		std::ofstream of;
-		of.open(fileName);
-	}
-		delete[]fileName;
+	
 }
 
-void TaskManager::help()
+void TaskManager::help(Vector<String> splittedCommand)
 {
-	std::cout << "The following commands are supported :" << std::endl;
-	std::cout << "open <file>		opens <file>" << std::endl;
-	std::cout << "close			closes currently opened file" << std::endl;
-	std::cout << "save			saves the currently open file" << std::endl;
-	std::cout << "saveas <file>		saves the currently open file in <file>" << std::endl;
-	std::cout << "help			prints this information" << std::endl;
-	std::cout << "print			prints all the figures" << std::endl;
-	std::cout << "create			creates new figure" << std::endl;
-	std::cout << "erase<n>		erases figure with a number <n>" << std::endl;
-	std::cout << "translate<n>		translates figure with a number <n>, or all the figures if there is no <n>" << std::endl;
-	std::cout << "erase<n>		erases figure with a number <n>" << std::endl;
-	std::cout << "within<option>		Displays all figures contained in given region. The user can specify by <option> what the region should be - circle (circle) or rectangle (rectangle)" << std::endl;
+	if (splittedCommand.getsize() == 1)
+	{
+		std::cout << "The following commands are supported :" << std::endl;
+		std::cout << "open <file>		opens <file>" << std::endl;
+		std::cout << "close			closes currently opened file" << std::endl;
+		std::cout << "save			saves the currently open file" << std::endl;
+		std::cout << "saveas <file>		saves the currently open file in <file>" << std::endl;
+		std::cout << "help			prints this information" << std::endl;
+		std::cout << "print			prints all the figures" << std::endl;
+		std::cout << "create			creates new figure" << std::endl;
+		std::cout << "erase<n>		erases figure with a number <n>" << std::endl;
+		std::cout << "translate<n>		translates figure with a number <n>, or all the figures if there is no <n>" << std::endl;
+		std::cout << "within<option>		Displays all figures contained in given region. The user can specify by <option> what the region should be - circle (circle) or rectangle (rectangle)" << std::endl;
+	}
+	else
+		std::cout << "Invalid command! Try \"help\"!" << std::endl;
+	
 }
 
 void saveHelper(char* fileName, Vector<Figure*>& container) {
@@ -148,56 +171,70 @@ void TaskManager::within(Vector<String> splittedCommand)
 	String wantedShape = splittedCommand[1];
 	
 
-	if (wantedShape == "rectangle" || wantedShape == "Rectangle")
+	if (wantedShape == "rectangle" || wantedShape == "Rectangle" )
 	{
-		Rect rect = loadRectFromInput(splittedCommand);
-		Vector<Figure*> areWithin;
-
-
-		for (size_t i = 0; i < container.getsize(); i++)
+		if (!validRectAreaParams(splittedCommand))
 		{
+			std::cout << "Invalid parameters! " << std::endl;
+		}
+		else
+		{
+			Rect rect = loadRectFromInput(splittedCommand);
+			Vector<Figure*> areWithin;
+
+			for (size_t i = 0; i < container.getsize(); i++)
+			{
 				if (WithinCalculator::isWithin(rect, container[i]))
 				{
 					areWithin.pushAtBack(container[i]);
 				}
-		}
-
-		if (areWithin.getsize() > 0)
-		{
-			for (size_t i = 0; i < areWithin.getsize(); i++)
-			{
-				areWithin[i]->print(std::cout);
 			}
-		}
-		else std::cout << "No figures are located within wanted area!";
 
+			if (areWithin.getsize() > 0)
+			{
+				for (size_t i = 0; i < areWithin.getsize(); i++)
+				{
+					areWithin[i]->print(std::cout);
+				}
+			}
+			else std::cout << "No figures are located within wanted area!" << std::endl;
+		}
 	}
 
 	else if (wantedShape == "circle" || wantedShape == "Circle")
 	{
-		Circle circle = loadCircleFromInput(splittedCommand);
-		Vector<Figure*> areWithin;
-
-		for (size_t i = 0; i < container.getsize(); i++)
+		if (!validCircleAreaParams(splittedCommand))
 		{
-			if (WithinCalculator::isWithin(circle, container[i]))
-			{
-				areWithin.pushAtBack(container[i]);
-			}
+			std::cout << "Invalid parameters!" << std::endl;
 		}
 
-		if (areWithin.getsize() > 0)
+		else
 		{
-			for (size_t i = 0; i < areWithin.getsize(); i++)
-			{
-				areWithin[i]->print(std::cout);
-			}
-		}
-		else std::cout << "No figures are located within wanted area!";
+			Circle circle = loadCircleFromInput(splittedCommand);
+			Vector<Figure*> areWithin;
 
+			for (size_t i = 0; i < container.getsize(); i++)
+			{
+				if (WithinCalculator::isWithin(circle, container[i]))
+				{
+					areWithin.pushAtBack(container[i]);
+				}
+			}
+
+			if (areWithin.getsize() > 0)
+			{
+				for (size_t i = 0; i < areWithin.getsize(); i++)
+				{
+					areWithin[i]->print(std::cout);
+				}
+			}
+			else std::cout << "No figures are located within wanted area!" << std::endl;
+
+		}
+		
 	}
 	else if (wantedShape == "line" || wantedShape == "Line") {
-		std::cout << "Wanted area is a line! Try rectangle or circle area!";
+		std::cout << "Wanted area is a line! Try rectangle or circle area!" << std::endl;
 	}
 	else
 	{
@@ -215,17 +252,31 @@ void TaskManager::create(Vector<String> splittedCommand)
 
 	if (wantedShape == "rectangle" || wantedShape == "Rectangle")
 	{
-		container.pushAtBack(loadRectFigFromInput(splittedCommand));
-		std::cout << "Successfully created " << wantedShape << std::endl;
+		if (validRectParams(splittedCommand))
+		{
+			container.pushAtBack(loadRectFigFromInput(splittedCommand));
+			std::cout << "Successfully created " << wantedShape << std::endl;
+		}
+		else std::cout << "Invalid parameters!" << std::endl;
 	}
+
 	else if (wantedShape == "circle" || wantedShape == "Circle")
 	{
-		container.pushAtBack(loadCircleFigFromInput(splittedCommand));
-		std::cout << "Successfully created " << wantedShape << std::endl;
+		if (validCircleParams(splittedCommand))
+		{
+			container.pushAtBack(loadCircleFigFromInput(splittedCommand));
+			std::cout << "Successfully created " << wantedShape << std::endl;
+		}
+		else std::cout << "Invalid parameters!" << std::endl;
 	}
+
 	else if (wantedShape == "line" || wantedShape == "Line") {
-		container.pushAtBack(loadLineFigFromInput(splittedCommand));
-		std::cout << "Successfully created " << wantedShape << std::endl;
+		if (validLineParams(splittedCommand))
+		{
+			container.pushAtBack(loadLineFigFromInput(splittedCommand));
+			std::cout << "Successfully created " << wantedShape << std::endl;
+		}
+		else std::cout << "Invalid parameters!" << std::endl;
 	}
 	else
 	{
@@ -233,20 +284,31 @@ void TaskManager::create(Vector<String> splittedCommand)
 	}
 }
 
-void TaskManager::close()
+void TaskManager::close(Vector<String> splittedCommand)
 {
-	std::cout << "Successfully closed " << currentFile << std::endl;
-	container.clearVector();
-	currentFile = "";
+	if (splittedCommand.getsize() == 1)
+	{
+		std::cout << "Successfully closed " << currentFile << std::endl;
+		container.clearVector();
+		currentFile = "";
+	}
+	else
+		std::cout << "Invalid command! Try \"close\"!" << std::endl;
+	
 }
 
 void TaskManager::translate(Vector<String> splittedCommand)
 {
-	if (splittedCommand[1].isNumber())
+	if (splittedCommand.getsize() == 1)
 	{
-		
+		std::cout << "Enter valid parameters!" << std::endl;
+	}
+	else if ((areValidParamsTranslate(splittedCommand)))
+	{
 
-		int figureIndex = splittedCommand[1].parseToInt(); 
+		if (splittedCommand[1].isNumber())
+		{
+			int figureIndex = splittedCommand[1].parseToInt();
 			if (figureIndex > container.getsize())
 			{
 				std::cout << "There is no figure number " << figureIndex << " !";
@@ -273,54 +335,65 @@ void TaskManager::translate(Vector<String> splittedCommand)
 				}
 
 				container[figureIndex - 1]->translate(firstParam.parseToInt(), secondParam.parseToInt());
-				std::cout << "Translated figure No " << figureIndex <<std::endl;
+				std::cout << "Translated figure No " << figureIndex << std::endl;
 			}
-			
-	}
-	else
-	{
-		String firstCommand(splittedCommand[1]);
-		String secondCommand(splittedCommand[2]);
-		String firstParam("");
-		String secondParam("");
 
-		for (size_t i = 9; i < firstCommand.length(); i++)
-		{
-			firstParam += firstCommand[i];
-		}
-
-		for (size_t i = 11; i < secondCommand.length(); i++)
-		{
-			secondParam += secondCommand[i];
-		}
-
-		for (size_t i = 0; i < container.getsize(); i++)
-		{
-			container[i]->translate(firstParam.parseToInt(), secondParam.parseToInt());
-		}
-		std::cout << "Translated all figures" << std::endl;
-	}
-}
-
-void TaskManager::erase(Vector<String> splittedCommand)
-{
-	if (splittedCommand.getsize() > 1)
-	{
-		int index = splittedCommand[1].parseToInt();
-		if (index > container.getsize())
-		{
-			std::cout << "There is no figure number " << index << " !" << std::endl;
 		}
 		else
 		{
-			std::cout << "Erased a " << container[index - 1]->getFigureType() << "(" << index << ")" << std::endl;
-			container.eraseAt(index - 1);
-			Figure::idCounter = 1;
+			String firstCommand(splittedCommand[1]);
+			String secondCommand(splittedCommand[2]);
+			String firstParam("");
+			String secondParam("");
+
+			const int vertical = 9;
+			const int horizontal = 11;
+
+			for (size_t i = vertical; i < firstCommand.length(); i++)
+			{
+				firstParam += firstCommand[i];
+			}
+
+			for (size_t i = horizontal; i < secondCommand.length(); i++)
+			{
+				secondParam += secondCommand[i];
+			}
+
 			for (size_t i = 0; i < container.getsize(); i++)
 			{
-				container[i]->setId(container[i]->idCounter++);
+				container[i]->translate(firstParam.parseToInt(), secondParam.parseToInt());
+			}
+			std::cout << "Translated all figures" << std::endl;
+		}
+	}
+	else std::cout << "Invalid command! Please check your spelling!" << std::endl;
+}
+	
+
+void TaskManager::erase(Vector<String> splittedCommand)
+{
+	if (splittedCommand.getsize() > 1 )
+	{
+		if (splittedCommand[1].isNumber())
+		{
+			int index = splittedCommand[1].parseToInt();
+			if (index > container.getsize())
+			{
+				std::cout << "There is no figure number " << index << " !" << std::endl;
+			}
+			else
+			{
+				std::cout << "Erased a " << container[index - 1]->getFigureType() << "(" << index << ")" << std::endl;
+				container.eraseAt(index - 1);
+				Figure::idCounter = 1;
+				for (size_t i = 0; i < container.getsize(); i++)
+				{
+					container[i]->setId(container[i]->idCounter++);
+				}
 			}
 		}
+		else std::cout << "Invalid position input!" << std::endl;
+		
 	}
 	else {
 		std::cout << "Invalid command! Type help for more info" << std::endl;
@@ -608,6 +681,171 @@ String TaskManager::getCurrentFile() const
 {
 	return currentFile;
 }
+
+bool TaskManager::isValidColour(String colour)
+{
+	if (colour == "blue" || colour == "red" || colour == "purple" || colour == "yellow" || colour == "pink" || colour == "green" ||
+		colour == "orange" || colour == "lime" || colour == "aqua" || colour == "navy" || colour == "coral" || colour == "teal" ||
+		colour == "mustard" || colour == "blue violet" || colour == "black" || colour == "white" || colour == "grey" || colour == "brown" ||
+		colour == "dark green" || colour == "blue gray" || colour == "indigo" || colour == "pea green" || colour == "amber" || colour == "maroon" )
+	{
+		return true;
+	}
+	return false;
+}
+
+bool TaskManager::validRectParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 6; i++)
+	{
+		
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 7 && isValidColour(splittedCommand[6])) {
+		return true;
+	}
+	return false;
+}
+
+bool TaskManager::validCircleParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 5; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 6 && isValidColour(splittedCommand[5])) {
+		return true;
+	}
+	return false;
+}
+
+bool TaskManager::validLineParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 7; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 8 && isValidColour(splittedCommand[7])) {
+		return true;
+	}
+	return false;
+}
+
+bool TaskManager::validRectAreaParams(Vector<String>& splittedCommand)
+{
+	//within rectangle 5 10 2 2
+	for (size_t i = 2; i < 6; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+	if (splittedCommand.getsize() != 6)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool TaskManager::validCircleAreaParams(Vector<String>& splittedCommand)
+{
+	//within circle 5 10 2
+	for (size_t i = 2; i < 5; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+	if (splittedCommand.getsize() != 5)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool TaskManager::areValidParamsTranslate(Vector<String>& splittedCommand)
+{
+	//translate vertical=10 horizontal=100
+	//translate 2 vertical=10 horizontal=100
+	if (splittedCommand.getsize() == 3)
+	{
+		if (checkVertical(splittedCommand[1]) && checkHorizontal(splittedCommand[2]))
+		{
+			return true;
+		}
+		return false;
+
+	}
+	else if (splittedCommand.getsize() == 4)
+	{
+
+		if (checkVertical(splittedCommand[2]) && checkHorizontal(splittedCommand[3]))
+		{
+			return true;
+		}
+		return false;
+
+	}
+	else return false;
+}
+
+bool TaskManager::checkHorizontal(String command)
+{
+	String horizontal = "horizontal=";
+	size_t i = 0;
+	for (i; i < 11; i++)
+	{
+		if (command[i] != horizontal[i])
+		{
+			return false;
+		}
+	}
+	for (i; i < command.length(); i++)
+	{
+		if (command[i] < '0' || command[i] > '9')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool TaskManager::checkVertical(String command)
+{
+	String vertical = "vertical=";
+	size_t i = 0;
+	for ( i; i < 9; i++)
+	{
+		if (command[i] != vertical[i])
+		{
+			return false;
+		}
+	}
+	for (i; i < command.length(); i++)
+	{
+		if (command[i] < '0' || command[i] > '9')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
 
 
 

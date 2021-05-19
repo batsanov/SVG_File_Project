@@ -13,12 +13,12 @@ private:
 public:
 	TaskManager();
 
-	void print();
+	void print(Vector<String> splittedCommand);
 	void open(Vector<String> splittedCommand);
-	void help();
+	void help(Vector<String> splittedCommand);
 	void save(Vector<String> splittedCommand);
 	void create(Vector<String> splittedCommand);
-	void close();
+	void close(Vector<String> splittedCommand);
 	void translate(Vector<String> splittedCommand);
 	void erase(Vector<String> splittedCommand);
 	void saveas(Vector<String> splittedCommand);
@@ -38,6 +38,15 @@ public:
 
 	String getCurrentFile()const ;
 
-	
+	bool isValidColour(String colour);
+	bool validRectParams(Vector<String>& splittedCommand);
+	bool validCircleParams(Vector<String>& splittedCommand);
+	bool validLineParams(Vector<String>& splittedCommand);
+	bool validRectAreaParams(Vector<String>& splittedCommand);
+	bool validCircleAreaParams(Vector<String>& splittedCommand);
+	bool areValidParamsTranslate(Vector<String>& splittedCommand);
+	bool checkHorizontal(String command);
+	bool checkVertical(String command);
+
 	
 };

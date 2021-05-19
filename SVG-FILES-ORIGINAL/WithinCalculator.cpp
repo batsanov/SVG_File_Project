@@ -37,7 +37,7 @@ bool WithinCalculator::isWithin(Circle circle, Figure* other)
     {
         Circle otherCircle(params[0], params[1], params[2], "");
 
-        return circleWithinCircle(otherCircle, circle);
+        return circleWithinCircle(circle, otherCircle);
     }
     else if (other->getFigureType() == "rectangle")
     {
@@ -80,8 +80,8 @@ bool WithinCalculator::circleWithinRect(Circle& circle, Rect& rect)
     {
         return false;
     }
-    return true;
 
+    return true;
 
 }
 
