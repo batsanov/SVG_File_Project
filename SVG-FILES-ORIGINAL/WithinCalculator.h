@@ -7,7 +7,10 @@
 
 class WithinCalculator {
 public:
-	static bool rectWithinRect(Rect& first, Rect& second);
+	static bool isWithin(Rect rect, Figure* other);
+	static bool isWithin(Circle circle, Figure* other);
+
+	static bool rectWithinRect( Rect& second, Rect& first);
 	static bool circleWithinRect(Circle& circle, Rect& rect); 
 	static bool lineWithinRect(Line& line, Rect& rect); 
 

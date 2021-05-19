@@ -151,32 +151,59 @@ void TaskManager::within(Vector<String> splittedCommand)
 	if (wantedShape == "rectangle" || wantedShape == "Rectangle")
 	{
 		Rect rect = loadRectFromInput(splittedCommand);
+		Vector<Figure*> areWithin;
+
 
 		for (size_t i = 0; i < container.getsize(); i++)
 		{
-			if (container[i]->getFigureType() == "rectangle")
+				if (WithinCalculator::isWithin(rect, container[i]))
+				{
+					areWithin.pushAtBack(container[i]);
+				}
+		}
+
+		if (areWithin.getsize() > 0)
+		{
+			for (size_t i = 0; i < areWithin.getsize(); i++)
 			{
-				//WithinCalculator::rectWithinRect(rect, container[i]);
+				areWithin[i]->print(std::cout);
 			}
 		}
+		else std::cout << "No figures are located within wanted area!";
 
 	}
 
 	else if (wantedShape == "circle" || wantedShape == "Circle")
 	{
-		
+		Circle circle = loadCircleFromInput(splittedCommand);
+		Vector<Figure*> areWithin;
+
+		for (size_t i = 0; i < container.getsize(); i++)
+		{
+			if (WithinCalculator::isWithin(circle, container[i]))
+			{
+				areWithin.pushAtBack(container[i]);
+			}
+		}
+
+		if (areWithin.getsize() > 0)
+		{
+			for (size_t i = 0; i < areWithin.getsize(); i++)
+			{
+				areWithin[i]->print(std::cout);
+			}
+		}
+		else std::cout << "No figures are located within wanted area!";
+
 	}
 	else if (wantedShape == "line" || wantedShape == "Line") {
-		
+		std::cout << "Wanted area is a line! Try rectangle or circle area!";
 	}
 	else
 	{
 		std::cout << "Invalid shape!" << std::endl;
 		return;
 	}
-
-	
-	
 
 }
 

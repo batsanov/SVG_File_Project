@@ -1,6 +1,59 @@
 #include "WithinCalculator.h"
 
-bool WithinCalculator::rectWithinRect(Rect& first, Rect& second)
+bool WithinCalculator::isWithin(Rect rect, Figure* other)
+{
+    Vector<int> params;
+    params = other->getParams();
+    
+    
+
+    if (other->getFigureType() == "circle")
+    {
+        
+        Circle circle(params[0], params[1], params[2], "");
+
+        return circleWithinRect(circle, rect);
+    }
+    else if (other->getFigureType() == "rectangle")
+    {
+        Rect otherRect(params[0], params[1], params[2], params[3], "");
+        
+        return rectWithinRect(otherRect, rect);
+    }
+    else if (other -> getFigureType() == "line")
+    {
+        Line line(params[0], params[1], params[2], params[3], 0, "");
+        return lineWithinRect(line, rect);
+    }    
+    return 0;
+}
+
+bool WithinCalculator::isWithin(Circle circle, Figure* other)
+{
+    Vector<int> params;
+    params = other->getParams();
+
+    if (other->getFigureType() == "circle")
+    {
+        Circle otherCircle(params[0], params[1], params[2], "");
+
+        return circleWithinCircle(otherCircle, circle);
+    }
+    else if (other->getFigureType() == "rectangle")
+    {
+        Rect rect(params[0], params[1], params[2], params[3], "");
+        return rectWithinCircle(rect, circle);
+    }
+    else if (other->getFigureType() == "line")
+    {
+        Line line(params[0], params[1], params[2], params[3], 0, "");
+        return lineWithinCircle(line, circle);
+    }
+    return 0;
+}
+
+
+bool WithinCalculator::rectWithinRect(Rect& second, Rect& first)
 {
     if ((second.getX() + second.getWidth()) < (first.getX() + first.getWidth())
         && (second.getX()) > (first.getX())

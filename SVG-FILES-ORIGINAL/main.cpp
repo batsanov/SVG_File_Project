@@ -11,10 +11,6 @@
 
 int main() {
 
-	//CommandReader reader;
-	//reader.start();
-
-	Figure* fgr = new Circle(5, 10, 15, "red");
-     fgr->getParams().print();
-	
+	CommandReader reader;
+	reader.start();
 }
