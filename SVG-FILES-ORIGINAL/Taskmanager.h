@@ -38,15 +38,7 @@ public:
 
 	String getCurrentFile()const ;
 
-	bool isValidColour(String colour);
-	bool validRectParams(Vector<String>& splittedCommand);
-	bool validCircleParams(Vector<String>& splittedCommand);
-	bool validLineParams(Vector<String>& splittedCommand);
-	bool validRectAreaParams(Vector<String>& splittedCommand);
-	bool validCircleAreaParams(Vector<String>& splittedCommand);
-	bool areValidParamsTranslate(Vector<String>& splittedCommand);
-	bool checkHorizontal(String command);
-	bool checkVertical(String command);
+	void reNumerate();
 
 	
 };

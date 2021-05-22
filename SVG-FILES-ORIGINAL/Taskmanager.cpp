@@ -6,6 +6,173 @@
 #include "Line.h"
 #include "WithinCalculator.h"
 
+bool isValidColour(String colour)
+{
+	if (colour == "blue" || colour == "red" || colour == "purple" || colour == "yellow" || colour == "pink" || colour == "green" ||
+		colour == "orange" || colour == "lime" || colour == "aqua" || colour == "navy" || colour == "coral" || colour == "teal" ||
+		colour == "mustard" || colour == "blue violet" || colour == "black" || colour == "white" || colour == "grey" || colour == "brown" ||
+		colour == "dark green" || colour == "blue gray" || colour == "indigo" || colour == "pea green" || colour == "amber" || colour == "maroon")
+	{
+		return true;
+	}
+	return false;
+}
+
+bool validRectParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 6; i++)
+	{
+
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 7 && isValidColour(splittedCommand[6])) {
+		return true;
+	}
+	return false;
+}
+
+bool validCircleParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 5; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 6 && isValidColour(splittedCommand[5])) {
+		return true;
+	}
+	return false;
+}
+
+bool validLineParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 7; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+
+	if (splittedCommand.getsize() == 8 && isValidColour(splittedCommand[7])) {
+		return true;
+	}
+	return false;
+}
+
+bool validRectAreaParams(Vector<String>& splittedCommand)
+{
+
+	for (size_t i = 2; i < 6; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+	if (splittedCommand.getsize() != 6)
+	{
+		return false;
+	}
+	return true;
+}
+
+bool validCircleAreaParams(Vector<String>& splittedCommand)
+{
+	for (size_t i = 2; i < 5; i++)
+	{
+		if (!(splittedCommand[i].isNumber()))
+		{
+			return false;
+		}
+	}
+	if (splittedCommand.getsize() != 5)
+	{
+		return false;
+	}
+	return true;
+}
+
+
+
+bool checkHorizontal(String command)
+{
+	String horizontal = "horizontal=";
+	size_t i = 0;
+	for (i; i < 11; i++)
+	{
+		if (command[i] != horizontal[i])
+		{
+			return false;
+		}
+	}
+	for (i; i < command.length(); i++)
+	{
+		if (command[i] < '0' || command[i] > '9')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+bool checkVertical(String command)
+{
+	String vertical = "vertical=";
+	size_t i = 0;
+	for (i; i < 9; i++)
+	{
+		if (command[i] != vertical[i])
+		{
+			return false;
+		}
+	}
+	for (i; i < command.length(); i++)
+	{
+		if (command[i] < '0' || command[i] > '9')
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
+
+bool areValidParamsTranslate(Vector<String>& splittedCommand)
+{
+
+	if (splittedCommand.getsize() == 3)
+	{
+		if (checkVertical(splittedCommand[1]) && checkHorizontal(splittedCommand[2]))
+		{
+			return true;
+		}
+		return false;
+
+	}
+	else if (splittedCommand.getsize() == 4)
+	{
+
+		if (checkVertical(splittedCommand[2]) && checkHorizontal(splittedCommand[3]))
+		{
+			return true;
+		}
+		return false;
+
+	}
+	else return false;
+}
+
+
+
+
 TaskManager::TaskManager()
 {
 	currentFile = "";
@@ -199,6 +366,7 @@ void TaskManager::within(Vector<String> splittedCommand)
 			}
 			else std::cout << "No figures are located within wanted area!" << std::endl;
 		}
+		reNumerate();
 	}
 
 	else if (wantedShape == "circle" || wantedShape == "Circle")
@@ -231,7 +399,7 @@ void TaskManager::within(Vector<String> splittedCommand)
 			else std::cout << "No figures are located within wanted area!" << std::endl;
 
 		}
-		
+		reNumerate();
 	}
 	else if (wantedShape == "line" || wantedShape == "Line") {
 		std::cout << "Wanted area is a line! Try rectangle or circle area!" << std::endl;
@@ -315,7 +483,6 @@ void TaskManager::translate(Vector<String> splittedCommand)
 			}
 			else
 			{
-				//translate 1 vertical=20 horizontal=10
 				String firstCommand(splittedCommand[2]);
 				String secondCommand(splittedCommand[3]);
 				String firstParam("");
@@ -385,11 +552,7 @@ void TaskManager::erase(Vector<String> splittedCommand)
 			{
 				std::cout << "Erased a " << container[index - 1]->getFigureType() << "(" << index << ")" << std::endl;
 				container.eraseAt(index - 1);
-				Figure::idCounter = 1;
-				for (size_t i = 0; i < container.getsize(); i++)
-				{
-					container[i]->setId(container[i]->idCounter++);
-				}
+				reNumerate();
 			}
 		}
 		else std::cout << "Invalid position input!" << std::endl;
@@ -682,168 +845,18 @@ String TaskManager::getCurrentFile() const
 	return currentFile;
 }
 
-bool TaskManager::isValidColour(String colour)
+void TaskManager::reNumerate()
 {
-	if (colour == "blue" || colour == "red" || colour == "purple" || colour == "yellow" || colour == "pink" || colour == "green" ||
-		colour == "orange" || colour == "lime" || colour == "aqua" || colour == "navy" || colour == "coral" || colour == "teal" ||
-		colour == "mustard" || colour == "blue violet" || colour == "black" || colour == "white" || colour == "grey" || colour == "brown" ||
-		colour == "dark green" || colour == "blue gray" || colour == "indigo" || colour == "pea green" || colour == "amber" || colour == "maroon" )
+	Figure::idCounter = 1;
+	for (size_t i = 0; i < container.getsize(); i++)
 	{
-		return true;
+		container[i]->setId(container[i]->idCounter++);
 	}
-	return false;
 }
 
-bool TaskManager::validRectParams(Vector<String>& splittedCommand)
-{
-	for (size_t i = 2; i < 6; i++)
-	{
-		
-		if (!(splittedCommand[i].isNumber()))
-		{
-			return false;
-		}
-	}
 
-	if (splittedCommand.getsize() == 7 && isValidColour(splittedCommand[6])) {
-		return true;
-	}
-	return false;
-}
 
-bool TaskManager::validCircleParams(Vector<String>& splittedCommand)
-{
-	for (size_t i = 2; i < 5; i++)
-	{
-		if (!(splittedCommand[i].isNumber()))
-		{
-			return false;
-		}
-	}
 
-	if (splittedCommand.getsize() == 6 && isValidColour(splittedCommand[5])) {
-		return true;
-	}
-	return false;
-}
-
-bool TaskManager::validLineParams(Vector<String>& splittedCommand)
-{
-	for (size_t i = 2; i < 7; i++)
-	{
-		if (!(splittedCommand[i].isNumber()))
-		{
-			return false;
-		}
-	}
-
-	if (splittedCommand.getsize() == 8 && isValidColour(splittedCommand[7])) {
-		return true;
-	}
-	return false;
-}
-
-bool TaskManager::validRectAreaParams(Vector<String>& splittedCommand)
-{
-	//within rectangle 5 10 2 2
-	for (size_t i = 2; i < 6; i++)
-	{
-		if (!(splittedCommand[i].isNumber()))
-		{
-			return false;
-		}
-	}
-	if (splittedCommand.getsize() != 6)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool TaskManager::validCircleAreaParams(Vector<String>& splittedCommand)
-{
-	//within circle 5 10 2
-	for (size_t i = 2; i < 5; i++)
-	{
-		if (!(splittedCommand[i].isNumber()))
-		{
-			return false;
-		}
-	}
-	if (splittedCommand.getsize() != 5)
-	{
-		return false;
-	}
-	return true;
-}
-
-bool TaskManager::areValidParamsTranslate(Vector<String>& splittedCommand)
-{
-	//translate vertical=10 horizontal=100
-	//translate 2 vertical=10 horizontal=100
-	if (splittedCommand.getsize() == 3)
-	{
-		if (checkVertical(splittedCommand[1]) && checkHorizontal(splittedCommand[2]))
-		{
-			return true;
-		}
-		return false;
-
-	}
-	else if (splittedCommand.getsize() == 4)
-	{
-
-		if (checkVertical(splittedCommand[2]) && checkHorizontal(splittedCommand[3]))
-		{
-			return true;
-		}
-		return false;
-
-	}
-	else return false;
-}
-
-bool TaskManager::checkHorizontal(String command)
-{
-	String horizontal = "horizontal=";
-	size_t i = 0;
-	for (i; i < 11; i++)
-	{
-		if (command[i] != horizontal[i])
-		{
-			return false;
-		}
-	}
-	for (i; i < command.length(); i++)
-	{
-		if (command[i] < '0' || command[i] > '9')
-		{
-			return false;
-		}
-	}
-	return true;
-}
-
-bool TaskManager::checkVertical(String command)
-{
-	String vertical = "vertical=";
-	size_t i = 0;
-	for ( i; i < 9; i++)
-	{
-		if (command[i] != vertical[i])
-		{
-			return false;
-		}
-	}
-	for (i; i < command.length(); i++)
-	{
-		if (command[i] < '0' || command[i] > '9')
-		{
-			return false;
-		}
-	}
-	return true;
-}
 
 
 
