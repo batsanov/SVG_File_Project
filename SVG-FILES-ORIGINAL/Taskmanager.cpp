@@ -508,29 +508,37 @@ void TaskManager::translate(Vector<String> splittedCommand)
 		}
 		else
 		{
-			String firstCommand(splittedCommand[1]);
-			String secondCommand(splittedCommand[2]);
-			String firstParam("");
-			String secondParam("");
-
-			const int vertical = 9;
-			const int horizontal = 11;
-
-			for (size_t i = vertical; i < firstCommand.length(); i++)
+			if (container.getsize() <= 0)
 			{
-				firstParam += firstCommand[i];
+				std::cout << "No existing figures!" << std::endl;
 			}
+			else {
 
-			for (size_t i = horizontal; i < secondCommand.length(); i++)
-			{
-				secondParam += secondCommand[i];
-			}
 
-			for (size_t i = 0; i < container.getsize(); i++)
-			{
-				container[i]->translate(firstParam.parseToInt(), secondParam.parseToInt());
+				String firstCommand(splittedCommand[1]);
+				String secondCommand(splittedCommand[2]);
+				String firstParam("");
+				String secondParam("");
+
+				const int vertical = 9;
+				const int horizontal = 11;
+
+				for (size_t i = vertical; i < firstCommand.length(); i++)
+				{
+					firstParam += firstCommand[i];
+				}
+
+				for (size_t i = horizontal; i < secondCommand.length(); i++)
+				{
+					secondParam += secondCommand[i];
+				}
+
+				for (size_t i = 0; i < container.getsize(); i++)
+				{
+					container[i]->translate(firstParam.parseToInt(), secondParam.parseToInt());
+				}
+				std::cout << "Translated all figures" << std::endl;
 			}
-			std::cout << "Translated all figures" << std::endl;
 		}
 	}
 	else std::cout << "Invalid command! Please check your spelling!" << std::endl;

@@ -12,10 +12,10 @@
 
 int main() {
 
-	tests();
+	//tests();
 
-	//CommandReader reader;
-	//reader.start();
+	CommandReader reader;
+	reader.start();
 	
 	return 0;
 }
