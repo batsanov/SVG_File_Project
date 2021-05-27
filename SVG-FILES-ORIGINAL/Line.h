@@ -21,7 +21,7 @@ public:
 	void translate(int vertical, int horizontal) override;
 	String getFigureType() override;
 	void printSave(std::ostream& os) override;
-	Vector<int> getParams() override; 
+	Vector<int> getParams() override;	
 
 	int getX1()const;
 	int getX2()const;

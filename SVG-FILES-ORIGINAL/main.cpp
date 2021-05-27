@@ -6,11 +6,16 @@
 #include "Taskmanager.h"
 #include "Vector.h"
 #include "WithinCalculator.h"
+#include "Tests.h"
 #include <iostream>
 
 
 int main() {
 
-	CommandReader reader;
-	reader.start();
+	tests();
+
+	//CommandReader reader;
+	//reader.start();
+	
+	return 0;
 }

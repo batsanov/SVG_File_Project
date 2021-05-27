@@ -3,8 +3,6 @@
 #include "Rect.h"
 #include "Line.h"
 
-// MAKE ALL TO WORK WITH VECTOR OF INTS AS SECOND PARAM
-
 class WithinCalculator {
 public:
 	static bool isWithin(Rect rect, Figure* other);

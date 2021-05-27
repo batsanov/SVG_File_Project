@@ -399,7 +399,7 @@ void TaskManager::within(Vector<String> splittedCommand)
 			else std::cout << "No figures are located within wanted area!" << std::endl;
 
 		}
-		reNumerate();
+		
 	}
 	else if (wantedShape == "line" || wantedShape == "Line") {
 		std::cout << "Wanted area is a line! Try rectangle or circle area!" << std::endl;
